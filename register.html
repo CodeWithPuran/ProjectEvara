@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <title>Register</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">
+                <img src="assets/img/logo.svg" alt="" class="nav__logo-img" />
+            </a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <!-- BREADCRUMB -->
+        <section class="breadcrumb">
+            <ul class="breadcrumb__list flex container">
+                <li><span class="breadcrumb__link">Register</span></li>
+            </ul>
+        </section>
+
+        <!-- REGISTER FORM -->
+        <section class="login-register section--lg">
+            <div class="login-register__container container grid">
+                <div class="register">
+                    <h3 class="section__title">Create an Account</h3>
+                    <form class="form grid" id="registrationForm" method="post">
+                        <div class="form__group">
+                            <label for="username" class="form__label">Username</label>
+                            <input type="text" placeholder="Enter your username" class="form__input" id="username" />
+                            <p id="username-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="email" class="form__label">Email</label>
+                            <input type="email" placeholder="Enter your email" class="form__input" id="email"/>
+                            <p id="email-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="password" class="form__label">Password</label>
+                            <input type="password" placeholder="Enter your password" class="form__input" id="password" />
+                            <p id="password-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="confirmPassword" class="form__label">Confirm Password</label>
+                            <input type="password" placeholder="Confirm your password" class="form__input"
+                                id="confirmPassword"/>
+                            <p id="confirmPassword-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="personalUrl" class="form__label">Personal URL</label>
+                            <input type="text" placeholder="Enter your personal URL" class="form__input"
+                                id="personalUrl" />
+                            <p id="personalUrl-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="dob" class="form__label">Date of Birth</label>
+                            <input type="date" class="form__input" id="dob" />
+                            <p id="dob-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__group">
+                            <label class="form__label">Gender</label>
+                            <label class="form__radio-label">
+                                <input type="radio" name="gender" value="male" /> Male
+                            </label>
+                            <label class="form__radio-label">
+                                <input type="radio" name="gender" value="female" /> Female
+                            </label>
+                            <p id="gender-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="comments" class="form__label">Comments</label>
+                            <textarea id="comments" class="form__textarea" placeholder="Enter your comments"></textarea>
+                            <p id="comments-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__group">
+                            <label for="confirmData" class="form__label">
+                                <input type="checkbox" id="confirmData" /> I confirm that the entered data are not
+                                fictitious
+                            </label>
+                            <p id="confirmData-error" class="error-message"></p>
+                        </div>
+
+                        <div class="form__btn">
+                            <button type="submit" class="btn btn-register" onclick=" validateRegistrationForm()">Submit &
+                                Register</button>
+                            <button type="reset" class="btn btn-clear" onclick="clearForm()">Clear All</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!--=============== SWIPER JS ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+
+</html>
