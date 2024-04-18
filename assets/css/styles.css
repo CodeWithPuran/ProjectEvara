@@ -1431,7 +1431,125 @@ table {
 
 
 
-
+  /*=============== LOGIN & REGISTER ===============*/
+.login-register__container {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: flex-start;
+    display: flex;
+      justify-content: center;
+  }
+  
+  .login,
+  .register {
+    border: 1px solid var(--border-color-alt);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    width: 100%;
+      /* Set width to 100% to prevent stretching */
+      max-width: 600px;
+  }
+  
+  .login {
+    width: 400px;
+  }
+  
+  .login-btn {
+    width: 100%;
+    cursor: pointer;
+  }
+  
+  .btn-register-login {
+    width: 100%;
+    background-color: var(--first-colorr);
+    color: var(--text-color);
+    cursor: pointer;
+    text-align: center;
+  
+  }
+  
+  /*REGISTER FORM*/
+   .form__label {
+     display: block;
+     font-weight: bold;
+     margin-bottom: 5px;
+   }
+  
+   .form__input,
+   .form__textarea {
+     width: 100%;
+     padding: 10px;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     font-size: 16px;
+     transition: border-color 0.3s ease;
+   }
+  
+   .form__radio-label {
+     margin-right: 20px;
+   }
+  
+   .form__btn {
+     margin-top: 20px;
+     display: flex;
+     justify-content: space-between;
+   }
+  
+  
+   .btn-register {
+     background-color: var(--first-color);
+     color: var(--body-color);
+     cursor: pointer;
+     text-align: center;
+   }
+  
+   .btn-clear {
+     background-color: var(--first-colorr);
+     color: var(--text-color);
+     cursor: pointer;
+   }
+  
+  .error-message {
+  color: red;
+  font-size: 14px;
+  }
+  
+  /* Style for "New to Evara?" text */
+  .new-to-evara {
+    margin: 20px 0;
+    text-align: center;
+    color: #666;
+  }
+  
+  .form__label {
+    font-size: var(--small-font-size);
+    color: var(--text-color);
+  }
+  
+  .form__textarea {
+    resize: vertical;
+  }
+  
+  .form__radio-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .form__checkbox-label {
+    font-size: var(--small-font-size);
+    color: var(--text-color);
+    margin-top: 0.5rem;
+  }
+  
+  .form__clear-btn {
+    background-color: var(--error-color);
+    border-color: var(--error-color);
+    color: var(--body-color);
+    transition: all 0.4s var(--transition);
+  }
+  
+  .form__clear-btn:hover {
+    background-color: var(--error-color-dark);
+  }
 
 
 
