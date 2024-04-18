@@ -621,3 +621,664 @@ document.addEventListener("DOMContentLoaded", function () {
     if(subscribeBtn){
       subscribeBtn.addEventListener('click', handleSubmit);
     }
+
+// ============ CHANGING LOGIN NAV LINK TO LOGOUT IF A USER IS LOGGED IN ===============
+document.addEventListener("DOMContentLoaded", function () {
+  function isLoggedIn() {
+        // Check if user data exists in session storage or local storage
+        return sessionStorage.getItem("loggedInUser") !== null;
+    }
+
+ // Function to update navigation menu based on login status
+function updateNavigationMenu() {
+  const loginNavItem = document.getElementById('loginNavItem');
+  const registerNavItem = document.getElementById('registerNavItem');
+
+  // Perform null checks before accessing elements
+  if (loginNavItem && registerNavItem) {
+    if (isLoggedIn()) {
+      // If user is logged in, display My Account
+      loginNavItem.innerHTML = `<a href="accounts.html" class="nav__link" ">My Account</a>`;
+      // Remove the register nav link
+      registerNavItem.parentNode.removeChild(registerNavItem);
+    } else {
+      // If user is not logged in, display login option
+      loginNavItem.innerHTML = `<a href="login-register.html" class="nav__link">Login</a>`;
+      // Add back the register nav link if it's not present
+      // const navList = document.querySelector('.nav__list');
+      // const newRegisterNavItem = document.createElement('li');
+      // newRegisterNavItem.id = 'registerNavItem';
+      registerNavItem.innerHTML = `<a href="register.html" class="nav__link">Register</a>`;
+      // navList.appendChild(newRegisterNavItem);
+    }
+  }
+}
+  // Call the function to update navigation menu on page load
+  updateNavigationMenu();
+});
+
+////============== MAKING DETAILS.HTML DYNAMIC ================
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle click events on Quick View icons
+    const quickViewIcons = document.querySelectorAll(".fi-rs-eye");
+
+    quickViewIcons.forEach(icon => {
+        icon.addEventListener("click", function(event) {
+            event.preventDefault();
+            openProductDetails(this);
+        });
+    });
+
+    // Handle click events on product images for Quick View
+    const productImages = document.querySelectorAll(".product__images");
+
+    productImages.forEach(image => {
+        image.addEventListener("click", function(event) {
+            event.preventDefault();
+            openProductDetails(this);
+        });
+    });
+
+    // Function to open product details
+    function openProductDetails(element) {
+        const productItem = element.closest(".product__item");
+        const productId = productItem.getAttribute("data-product-id");
+        const productName = productItem.querySelector('.product__title').innerText;
+        const productNewPrice = productItem.querySelector('.new__price').innerText;
+        const productOldPrice = productItem.querySelector('.old__price').innerText;
+        const productImage = productItem.querySelector('.product__img').src;
+
+        // Construct product details object
+        const productDetails = {
+            id: productId,
+            name: productName,
+            oldPrice: productOldPrice,
+            newPrice: productNewPrice,
+            image: productImage
+        };
+
+        // Store selected product details in local storage
+        localStorage.setItem('selectedProduct', JSON.stringify(productDetails));
+
+        // Redirect user to details.html
+        window.location.href = 'details.html';
+    }
+
+
+    // On details.html, retrieve product details from local storage and populate the page
+    if (window.location.pathname.includes('details.html')) {
+        const selectedProduct = JSON.parse(localStorage.getItem('selectedProduct'));
+        if (selectedProduct) {
+            document.querySelector('#product-name').innerText = selectedProduct.name;
+            document.querySelector('#product-old-price').innerText = selectedProduct.oldPrice;
+            document.querySelector('#product-new-price').innerText = selectedProduct.newPrice;
+            document.querySelector('#product-image').src = selectedProduct.image;
+        }
+    }
+});
+
+// ===================== Updating wishlist and cart ======================
+// Updating wishlist and cart
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to check if user is logged in
+    function isUserLoggedIn() {
+        return sessionStorage.getItem("loggedInUser") !== null;
+    }
+
+    // Function to update wishlist
+    function updateWishlist() {
+        // Get the wishlist items container
+        const wishlistItemsContainer = document.getElementById("wishlistItems");
+
+        // Check if the container exists
+        if (!wishlistItemsContainer) {
+            console.error("Wishlist items container not found.");
+            return;
+        }
+
+        // Get the logged-in user's information from session storage
+        const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+
+        if (loggedInUser) {
+            const loggedInUserId = loggedInUser.userId;
+
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+            // Filter wishlist items for the logged-in user
+            const userWishlist = wishlist.filter(item => item.userId === loggedInUserId);
+
+            // Display user's wishlist items
+            wishlistItemsContainer.innerHTML = ""; // Clear existing wishlist items
+
+            userWishlist.forEach(function(product) {
+                // Create a table row for each product
+                const row = document.createElement("tr");
+
+                // Product image column
+                const imageCell = document.createElement("td");
+                const image = document.createElement("img");
+                image.src = product.image;
+                image.alt = "Product Image";
+                image.classList.add("table__img"); // Add class for styling
+                imageCell.appendChild(image);
+                row.appendChild(imageCell);
+
+                // Product name column
+                const nameCell = document.createElement("td");
+                const productName = document.createElement("h3");
+                productName.textContent = product.name;
+                productName.classList.add("table__title"); // Add class for styling
+                const description = document.createElement("p");
+                description.textContent = "Crafted with precision and designed for comfort, our garments are perfect for any occasion.";
+                description.classList.add("table__description"); // Add class for styling
+                nameCell.appendChild(productName);
+                nameCell.appendChild(description);
+                row.appendChild(nameCell);
+
+                // Product price column
+                const priceCell = document.createElement("td");
+                const priceSpan = document.createElement("span");
+                priceSpan.textContent = product.newPrice;
+                priceSpan.classList.add("table__price"); // Add class for styling
+                priceCell.appendChild(priceSpan);
+                row.appendChild(priceCell);
+                
+                if (window.location.pathname.includes("wishlist")) {
+                  const stockCell = document.createElement("td");
+                  const stockSpan = document.createElement("span");
+                  stockSpan.textContent = "In Stock"; // Example stock status
+                  stockCell.appendChild(stockSpan);
+                  row.appendChild(stockCell); 
+                  
+                  // Action column (Add to Cart button)
+                  const actionCell = document.createElement("td");
+                  const addToCartBtn = document.createElement("button");
+                  addToCartBtn.textContent = "Add to Cart";
+                  addToCartBtn.classList.add("btn", "btn--sm", "addToCartBtn"); // Add classes for styling
+                  addToCartBtn.dataset.productId = product.id; // Store product ID as data attribute
+                  actionCell.appendChild(addToCartBtn);
+                  row.appendChild(actionCell);
+                }
+
+                // Remove column (Trash icon)
+                const removeCell = document.createElement("td");
+                const trashIcon = document.createElement("i");
+                trashIcon.classList.add("fi", "fi-rs-trash", "table__trash"); // Add classes for styling
+                trashIcon.dataset.productId = product.id; // Store product ID as data attribute
+                removeCell.appendChild(trashIcon);
+                row.appendChild(removeCell);
+
+                // Add the row to the table
+                wishlistItemsContainer.appendChild(row);
+            });
+
+            // Add event listeners to Add to Cart buttons from wishlist page
+            const addToCartButtons = document.querySelectorAll(".addToCartBtn");
+            addToCartButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    const productId = this.dataset.productId;
+
+                    // Get existing cart items from local storage
+                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+                    // Check if cart is null or not an array
+                    if (!Array.isArray(cart)) {
+                        // Initialize cart as an empty array
+                        cart = [];
+                    }
+
+                    // Find the product details in the wishlist
+                    const product = userWishlist.find(item => item.id === productId);
+
+                    // Add the product to the cart
+                    cart.push(product);
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                    alert("Product added to cart!");
+
+                    // Redirect user to the cart page
+                    window.location.href = 'cart.html';
+                });
+            });
+
+            // Add event listeners to Trash icons
+            const trashIcons = document.querySelectorAll(".table__trash");
+            trashIcons.forEach(icon => {
+                icon.addEventListener("click", function() {
+                    const productId = this.dataset.productId;
+
+                    // Remove the item from the wishlist
+                    wishlist = wishlist.filter(item => !(item.id === productId && item.userId === loggedInUserId));
+                    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+                    // Update the wishlist display
+                    updateWishlist();
+                });
+            });
+        }
+    }
+
+    // Function to update cart
+    function updateCart() {
+        // Get the cart items container
+        const cartItemsContainer = document.getElementById("cartItems");
+
+        // Check if the container exists
+        if (!cartItemsContainer) {
+            console.error("Cart items container not found.");
+            return;
+        }
+
+        // Get the logged-in user's information from session storage
+        const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+
+        if (loggedInUser) {
+            const loggedInUserId = loggedInUser.userId;
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            // Filter cart items for the logged-in user
+            const userCart = cart.filter(item => item.userId === loggedInUserId);
+
+
+            // Display user's cart items
+            cartItemsContainer.innerHTML = ""; // Clear existing cart items
+
+            userCart.forEach(function(product) {
+                // Create a table row for each product
+                const row = document.createElement("tr");
+
+                
+                // Product image column
+                const imageCell = document.createElement("td");
+                const image = document.createElement("img");
+                image.src = product.image;
+                image.alt = "Product Image";
+                image.classList.add("table__img"); // Add class for styling
+                imageCell.appendChild(image);
+                row.appendChild(imageCell);
+
+                // Product name column
+                const nameCell = document.createElement("td");
+                nameCell.textContent = product.name;
+                row.appendChild(nameCell);
+
+                // Product price column
+                const priceCell = document.createElement("td");
+                priceCell.textContent = product.newPrice;
+                row.appendChild(priceCell);
+
+                // Quantity column
+                const quantityCell = document.createElement("td");
+                const quantityInput = document.createElement("input");
+                quantityInput.type = "number";
+                quantityInput.value = 1; // Default quantity
+                quantityInput.classList.add("quantity"); // Add class for styling
+                quantityCell.appendChild(quantityInput);
+                row.appendChild(quantityCell);
+
+                // Sub-total column
+                const subTotalCell = document.createElement("td");
+                // Calculate sub-total
+                const subTotalValue = parseFloat(product.newPrice) * parseInt(quantityInput.value);
+                // subTotalCell.textContent = isNaN(subTotalValue) ? "0.00" : subTotalValue.toFixed(2);
+                subTotalCell.textContent = product.newPrice;
+                row.appendChild(subTotalCell);
+
+                // Remove column (Trash icon)
+                const removeCell = document.createElement("td");
+                const trashIcon = document.createElement("i");
+                trashIcon.classList.add("fi", "fi-rs-trash", "table__trash"); // Add classes for styling
+                trashIcon.dataset.productId = product.id; // Store product ID as data attribute
+                removeCell.appendChild(trashIcon);
+                row.appendChild(removeCell);
+
+                // Add the row to the table
+                cartItemsContainer.appendChild(row);
+                
+                /// Update sub-total when quantity changes
+                quantityInput.addEventListener("change", function() {
+                  const newQuantity = parseInt(this.value);
+                  
+                  // Remove dollar sign from product.newPrice and parse as float
+                  const priceWithoutDollarSign = parseFloat(product.newPrice.replace('$', ''));
+
+                  // Check if priceWithoutDollarSign is a valid number
+                  if (!isNaN(priceWithoutDollarSign)) {
+                      const subTotal = priceWithoutDollarSign * newQuantity;
+                      subTotalCell.textContent = subTotal.toFixed(2);
+                  } else {
+                      // Handle case where priceWithoutDollarSign is not a valid number
+                      subTotalCell.textContent = "0.00";
+                  }
+
+                  // Update cart item in local storage
+                  const cartIndex = cart.findIndex(item => item.id === product.id && item.userId === loggedInUserId);
+                  if (cartIndex !== -1) {
+                    const oldQuantity = cart[cartIndex].quantity;
+                    const priceWithoutDollarSign = parseFloat(cart[cartIndex].newPrice.replace('$', ''));
+                    
+                    // Calculate new sub-total based on the updated quantity
+                    const newQuantity = parseInt(this.value);
+                    const newSubTotal = priceWithoutDollarSign * newQuantity;
+
+                    // Update quantity and sub-total in the cart item
+                    cart[cartIndex].quantity = newQuantity;
+                    cart[cartIndex].subTotal = newSubTotal.toFixed(2); 
+                    
+                    // Update local storage
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                }
+            });
+          });
+
+            // Add event listeners to Add to Cart buttons
+            const addToCartButtons = document.querySelectorAll(".addToCartBtn");
+            addToCartButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    const productId = this.dataset.productId;
+
+                    // Get existing cart items from local storage
+                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+                    // Check if cart is null or not an array
+                    if (!Array.isArray(cart)) {
+                        // Initialize cart as an empty array
+                        cart = [];
+                    }
+
+                    // Find the product details in the wishlist
+                    const product = userWishlist.find(item => item.id === productId);
+
+                    // Add the product to the cart
+                    cart.push(product);
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                    alert("Product added to cart!");
+
+                    // Redirect user to the cart page
+                    window.location.href = 'cart.html';
+                });
+            });
+
+             // Add event listeners to Trash icons
+            const trashIcons = document.querySelectorAll(".table__trash");
+            trashIcons.forEach(icon => {
+                icon.addEventListener("click", function() {
+                    const productId = this.dataset.productId;
+
+                    // Remove the item from the wishlist
+                    cart = cart.filter(item => !(item.id === productId && item.userId === loggedInUserId));
+                    localStorage.setItem("cart", JSON.stringify(cart));
+
+                    // Update the cart display
+                    updateCart();
+                });
+            });
+        }
+    }
+
+    // Function to add a product to the cart
+    function addToCart(productId, productName, productNewPrice, productOldPrice, productImage) {
+      // Check if user is logged in
+      const isLoggedIn = isUserLoggedIn();
+
+      // If user is not logged in, redirect to login page
+      if (!isLoggedIn) {
+          // Store the current page URL to redirect back after login
+          localStorage.setItem('redirectUrl', window.location.href);
+
+          // Redirect to login page
+          window.location.href = 'login-register.html';
+          return; // Stop further execution
+      } else {
+          // Get existing cart items for the logged-in user from local storage
+          const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+          let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+          // Check if the product is already in the cart for the current user
+          const isInCart = cart.some(item => item.id === productId && item.userId === loggedInUser.userId);
+
+          if (isInCart) {
+              // Notify the user that the product is already in the cart
+              alert("Product is already in the cart!");
+          } else {
+              // Find the product details based on productId
+              const productDetails = {
+                  id: productId,
+                  name: productName,
+                  oldPrice: productOldPrice,
+                  newPrice: productNewPrice,
+                  image: productImage,
+                  userId: loggedInUser.userId
+              };
+
+              // Add the product to the cart
+              cart.push(productDetails);
+              localStorage.setItem("cart", JSON.stringify(cart));
+              alert("Product added to cart!");
+
+              // Redirect user to the cart page
+              window.location.href = 'cart.html';
+          }
+      }
+  }
+
+  // Handle click events on Add to Cart icons from all pages
+  const addToCartIcons = document.querySelectorAll(".fi-rs-shopping-bag-add");
+  addToCartIcons.forEach(function(icon) {
+      icon.addEventListener("click", function(event) {
+        event.preventDefault();
+        const productId = this.closest(".product__item").getAttribute("data-product-id");
+        const productName = this.closest(".product__item").querySelector('.product__title').innerText;
+        const productNewPrice = this.closest(".product__item").querySelector('.new__price').innerText;
+        const productOldPrice = this.closest(".product__item").querySelector('.old__price').innerText;
+        const productImage = this.closest(".product__item").querySelector('.product__img').src;
+
+        addToCart(productId, productName, productNewPrice, productOldPrice, productImage);
+      });
+  });
+
+// Handle click events on Add to Wishlist buttons/icons
+    const addToWishlistButtons = document.querySelectorAll(".addToWishlist");
+    addToWishlistButtons.forEach(function(button) {
+        button.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // Check if user is logged in
+            const isLoggedIn = isUserLoggedIn();
+
+            // If user is not logged in, redirect to login page
+            if (!isLoggedIn) {
+                // Store the current page URL to redirect back after login
+                localStorage.setItem('redirectUrl', window.location.href);
+
+                // Redirect to login page
+                window.location.href = 'login-register.html';
+                return; // Stop further execution
+            } else {
+                // User is logged in, proceed with adding to wishlist
+                const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+                const productId = this.closest(".product__item").getAttribute("data-product-id");
+                const productName = this.closest(".product__item").querySelector('.product__title').innerText;
+                const productNewPrice = this.closest(".product__item").querySelector('.new__price').innerText;
+                const productOldPrice = this.closest(".product__item").querySelector('.old__price').innerText;
+                const productImage = this.closest(".product__item").querySelector('.product__img').src;
+
+                // Construct product details object
+                const productDetails = {
+                    id: productId,
+                    name: productName,
+                    oldPrice: productOldPrice,
+                    newPrice: productNewPrice,
+                    image: productImage,
+                    userId: loggedInUser.userId
+                };
+
+                // Get existing wishlist items from local storage
+                let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+                // Check if wishlist is null or not an array
+                if (!Array.isArray(wishlist)) {
+                    // Initialize wishlist as an empty array
+                    wishlist = [];
+                }
+
+                // Check if the product is already in the wishlist for the current user
+                if (!wishlist.some(item => item.id === productId && item.userId === loggedInUser.userId)) {
+                    // Add the product to the wishlist
+                    wishlist.push(productDetails);
+                    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+                    alert("Product added to wishlist!");
+
+                    // Redirect user to the wishlist page
+                    window.location.href = 'wishlist.html';
+                } else {
+                    alert("Product is already in the wishlist!");
+                    // Redirect user to the wishlist page
+                    window.location.href = 'wishlist.html';
+                }
+            }
+        });
+    });
+
+    // Call updateWishlist on page load
+    updateWishlist();
+
+    // Call updateCart on page load
+    updateCart();
+
+
+//=============================================================== POPULATING CART ITEMS INTO CHECKOUT PAGE========================================
+    // Get the checkout table container
+    const checkoutTable = document.getElementById("checkoutTable");
+
+    // Check if the checkout table container exists
+    if (!checkoutTable) {
+        console.error("Checkout table container not found.");
+        return;
+    }
+
+    // Populate checkout table
+    populateCheckoutTable();
+
+    function populateCheckoutTable() {
+        // Get the logged-in user's information from session storage
+        const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+
+        // Check if user is logged in
+        if (!loggedInUser) {
+            console.log("User is not logged in.");
+            return;
+        }
+
+        // Get cart items from local storage
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Filter cart items for the logged-in user
+        const userCart = cart.filter(item => item.userId === loggedInUser.userId);
+
+        // Check if user's cart is empty
+        if (userCart.length === 0) {
+            console.log("User's cart is empty.");
+            return;
+        }
+
+        let totalSubTotal = 0;
+
+        // Clear existing rows
+        checkoutTable.innerHTML = "";
+
+        // Iterate over each cart item
+        userCart.forEach(item => {
+            // Create a new table row
+            const row = document.createElement("tr");
+
+            // Product image column
+            const imageCell = document.createElement("td");
+            const image = document.createElement("img");
+            image.src = item.image || ""; // Handle missing image
+            image.alt = "Product Image";
+            image.classList.add("order__img");
+            imageCell.appendChild(image);
+            row.appendChild(imageCell);
+
+            // Product name and quantity column
+            const nameQuantityCell = document.createElement("td");
+            const productName = document.createElement("h3");
+            productName.textContent = item.name || ""; // Handle missing name
+            productName.classList.add("table__title");
+            const quantity = document.createElement("p");
+            quantity.textContent = `x ${item.quantity || 0}`; // Handle missing quantity
+            quantity.classList.add("table__quantity");
+            nameQuantityCell.appendChild(productName);
+            nameQuantityCell.appendChild(quantity);
+            row.appendChild(nameQuantityCell);
+
+            // Sub-total column
+            const subTotalCell = document.createElement("td");
+            const subTotalWithoutDollarSign = parseFloat(item.subTotal.replace('$', '') || 0); // Handle missing or invalid subTotal
+            subTotalCell.textContent = `$${subTotalWithoutDollarSign.toFixed(2)}`;
+            subTotalCell.classList.add("table__price");
+            row.appendChild(subTotalCell);
+
+            // Add the row to the checkout table
+            checkoutTable.appendChild(row);
+
+            // Add the subtotal of this item to the totalSubTotal
+            totalSubTotal += subTotalWithoutDollarSign;
+        });
+
+        // Add row for Subtotal
+        const subtotalRow = document.createElement("tr");
+        const subtotalTitleCell = document.createElement("td");
+        subtotalTitleCell.colSpan = 2;
+        subtotalTitleCell.innerHTML = '<span class="order__subtitle">SubTotal</span>';
+        subtotalRow.appendChild(subtotalTitleCell);
+        const subtotalValueCell = document.createElement("td");
+        subtotalValueCell.innerHTML = `<span class="table__price">$${totalSubTotal.toFixed(2)}</span>`;
+        subtotalRow.appendChild(subtotalValueCell);
+        checkoutTable.appendChild(subtotalRow);
+
+        // Add row for Shipping
+        const shippingRow = document.createElement("tr");
+        const shippingTitleCell = document.createElement("td");
+        shippingTitleCell.colSpan = 2;
+        shippingTitleCell.innerHTML = '<span class="order__subtitle">Shipping</span>';
+        shippingRow.appendChild(shippingTitleCell);
+        const shippingValueCell = document.createElement("td");
+        shippingValueCell.innerHTML = '<span class="table__price">Free Shipping</span>';
+        shippingRow.appendChild(shippingValueCell);
+        checkoutTable.appendChild(shippingRow);
+
+        // Add row for Total
+        const totalRow = document.createElement("tr");
+        const totalTitleCell = document.createElement("td");
+        totalTitleCell.colSpan = 2;
+        totalTitleCell.innerHTML = '<span class="order__subtitle">Total</span>';
+        totalRow.appendChild(totalTitleCell);
+        const totalValueCell = document.createElement("td");
+        const totalAmount = totalSubTotal;
+        totalValueCell.innerHTML = `<span class="order__grand-total">$${totalAmount.toFixed(2)}</span>`;
+        totalRow.appendChild(totalValueCell);
+        checkoutTable.appendChild(totalRow);
+    }
+
+
+// ====================================================================PLACE ORDER BUTTON ================================================
+    // Get the Place Order button
+    const placeOrderButton = document.getElementById("placeOrderButton");
+
+    // Check if the Place Order button exists
+    if (!placeOrderButton) {
+        console.error("Place Order button not found.");
+        return;
+    }
+
+    // Add event listener to the Place Order button
+    placeOrderButton.addEventListener("click", function() {
+        // Display congratulations message
+        alert("Congratulations! Your order has been placed!");
+
+        // Redirect user to shop.html
+        window.location.href = 'shop.html';
+    });
+});
