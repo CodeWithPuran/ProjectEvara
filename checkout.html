@@ -1,0 +1,169 @@
+checkout.html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!--=============== FLATICON ===============-->
+  <link rel="stylesheet"
+    href="https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css" />
+
+  <!--=============== SWIPER CSS ===============-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+  <!--=============== CSS ===============-->
+  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <title>Evara - Visit | Shop | Enjoy</title>
+</head>
+
+<body>
+  <!--=============== HEADER ===============-->
+  <header class="header">
+    <div class="header__top">
+      <div class="header__container container">
+        <div class="header__contact">
+          <span><b>Phone</b>: +1 - 647 - 209 - 3287</span>
+
+          <span><b>Email:</b> info@evara.com</span>
+        </div>
+
+        <p class="header__alert-news">
+          Hurry Up - Save Big!!!
+        </p>
+      </div>
+    </div>
+
+    <nav class="nav container">
+      <a href="index.html" class="nav__logo">
+        <img src="assets/img/logo.svg" alt="" class="nav__logo-img" />
+      </a>
+
+      <div class="nav__menu" id="nav-menu">
+        <div class="nav__menu-top">
+          <a href="index.html" class="nav__menu-logo">
+            <img src="assets/img/logo.svg" alt="">
+          </a>
+
+          <div class="nav__close" id="nav-close">
+            <i class="fi fi-rs-cross-small"></i>
+          </div>
+        </div>
+
+        <ul class="nav__list">
+          <li class="nav__item">
+            <a href="index.html" class="nav__link active-link">Home</a>
+          </li>
+
+          <li class="nav__item">
+            <a href="categories.html" class="nav__link">Categories</a>
+          </li>
+
+          <li class="nav__item">
+            <a href="shop.html" class="nav__link">Shop</a>
+          </li>
+
+          <li class="nav__item" id="registerNavItem">
+            <a href="register.html" class="nav__link">Register</a>
+          </li>
+
+          <li class="nav__item" id="loginNavItem">
+            <a href="login-register.html" class="nav__link">Login</a>
+          </li>
+        </ul>
+
+        <div class="header__search">
+          <input type="text" placeholder="Search for items..." class="form__input" />
+
+          <button class="search__btn">
+            <img src="assets/img/search.png" alt="" />
+          </button>
+        </div>
+      </div>
+
+      <div class="header__user-actions">
+        <a href="wishlist.html" class="header__action-btn" title="My Wish">
+          <img src="assets/img/icon-heart.svg" alt="" />
+        </a>
+
+        <a href="cart.html" class="header__action-btn">
+          <img src="assets/img/icon-cart.svg" alt="Cart icon" title="My cart" />
+        </a>
+
+        <div class="header__action-btn nav__toggle" id="nav-toggle">
+          <img src="assets/img/menu-burger.svg" alt="Wishlist icon">
+        </div>
+      </div>
+    </nav>
+  </header>
+
+    <!--=============== MAIN ===============-->
+    <main class="main">
+      <!--=============== BREADCRUMB ===============-->
+      <section class="breadcrumb">
+        <ul class="breadcrumb__list flex container">
+          <li><a href="index.html" class="breadcrumb__link">Home</a></li>
+          <li><span class="breadcrumb__link">></span></li>
+          <li><span class="breadcrumb__link">Shop</span></li>
+          <li><span class="breadcrumb__link">></span></li>
+          <li><span class="breadcrumb__link">Checkout</span></li>
+        </ul>
+      </section>
+
+      <!--=============== CHECKOUT ===============-->
+      <section class="checkout section--lg">
+        <div class="checkout__container container grid">
+          <div class="checkout__group">
+            <h3 class="section__title">Cart Totals</h3>
+
+            <table class="order__table" id="checkoutTable">
+              <thead>
+                   <tr>
+                    <th colspan="2">Products</th>
+                    <th>Total</th>
+                   </tr>
+                </thead>
+                <tbody>
+                    <!-- Elements here will be dynamically populated -->
+                </tbody>
+            </table>
+
+            <div class="payment__methods">
+              <h3 class="checkout__title payment__title">Payment</h3>
+
+              <div class="payment__option flex">
+                <input
+                  type="radio"
+                  name="radio"
+                  checked
+                  class="payment__input"
+                />
+                <label class="payment__label"
+                  >Direct Bank Transfer</label
+                >
+              </div>
+
+              <div class="payment__option flex">
+                <input type="radio" name="radio" class="payment__input" />
+                <label class="payment__label">G -Pay</label>
+              </div>
+
+              <div class="payment__option flex">
+                <input type="radio" name="radio" class="payment__input" />
+                <label class="payment__label">Paypal</label>
+              </div>
+            </div>
+
+            <button id="placeOrderButton" class="btn btn--md">Place Order</button>
+          </div>
+        </div>
+      </section>
+    <!--=============== SWIPER JS ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
