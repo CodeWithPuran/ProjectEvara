@@ -972,32 +972,32 @@ document.addEventListener('DOMContentLoaded', function() {
           });
 
             // Add event listeners to Add to Cart buttons
-            const addToCartButtons = document.querySelectorAll(".addToCartBtn");
-            addToCartButtons.forEach(button => {
-                button.addEventListener("click", function() {
-                    const productId = this.dataset.productId;
+            // const addToCartButtons = document.querySelectorAll(".addToCartBtn");
+            // addToCartButtons.forEach(button => {
+            //     button.addEventListener("click", function() {
+            //         const productId = this.dataset.productId;
 
-                    // Get existing cart items from local storage
-                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            //         // Get existing cart items from local storage
+            //         let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-                    // Check if cart is null or not an array
-                    if (!Array.isArray(cart)) {
-                        // Initialize cart as an empty array
-                        cart = [];
-                    }
+            //         // Check if cart is null or not an array
+            //         if (!Array.isArray(cart)) {
+            //             // Initialize cart as an empty array
+            //             cart = [];
+            //         }
 
-                    // Find the product details in the wishlist
-                    const product = userWishlist.find(item => item.id === productId);
+            //         // Find the product details in the wishlist
+            //         const product = userWishlist.find(item => item.id === productId);
 
-                    // Add the product to the cart
-                    cart.push(product);
-                    localStorage.setItem("cart", JSON.stringify(cart));
-                    alert("Product added to cart!");
+            //         // Add the product to the cart
+            //         cart.push(product);
+            //         localStorage.setItem("cart", JSON.stringify(cart));
+            //         alert("Product added to cart!");
 
-                    // Redirect user to the cart page
-                    window.location.href = 'cart.html';
-                });
-            });
+            //         // Redirect user to the cart page
+            //         window.location.href = 'cart.html';
+            //     });
+            // });
 
              // Add event listeners to Trash icons
             const trashIcons = document.querySelectorAll(".table__trash");
